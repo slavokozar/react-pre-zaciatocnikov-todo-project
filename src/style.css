@@ -1,0 +1,47 @@
+.container {
+    max-width: 720px !important;
+}
+
+.list-wrapper ul {
+    padding: 0;
+    text-align: left;
+    list-style: none;
+    margin-bottom: 0
+}
+
+.list-wrapper ul li {
+    border-bottom: 2px solid #f3f3f3
+}
+
+.list-wrapper ul li:last-child {
+    border-bottom: none
+}
+
+.list-wrapper .completed label{
+    text-decoration: line-through;
+    text-decoration-color: #3da5f4
+}
+
+.form-control, .btn, .nav-link{
+    border-radius: 0 !important;
+}
+
+.nav-link{
+    padding: 0rem 1rem !important;
+}
+
+.form-check-input{
+    border-radius: 0 !important; 
+    width: 1.5em !important;
+    height: 1.5em !important;
+    margin-top: 0 !important;
+    margin-right: 1em;
+}
+
+.btn-sm{
+    padding: 0 !important;
+}
+
+.card-footer{
+    color: rgba(0, 0, 0, 0.3);
+}
