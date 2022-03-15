@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/react-pre-zaciatocnikov-todo-project/static/css/main.b3ad81e1.css",
+    "main.js": "/react-pre-zaciatocnikov-todo-project/static/js/main.dcfb8e1d.js",
+    "index.html": "/react-pre-zaciatocnikov-todo-project/index.html",
+    "main.b3ad81e1.css.map": "/react-pre-zaciatocnikov-todo-project/static/css/main.b3ad81e1.css.map",
+    "main.dcfb8e1d.js.map": "/react-pre-zaciatocnikov-todo-project/static/js/main.dcfb8e1d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b3ad81e1.css",
+    "static/js/main.dcfb8e1d.js"
+  ]
+}
