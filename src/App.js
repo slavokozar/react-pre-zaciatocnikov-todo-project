@@ -4,14 +4,35 @@ import {useState} from "react";
 export default function App() {
     const [input, setInput] = useState('');
 
-    const [task, setTask] = useState(null);
+    const [tasks, setTasks] = useState([
+        {
+            "text": "Nainštaluj si Node.js",
+            "active": true
+        },
+        {
+            "text": "Naštuduj prezentácie z Kurz pre začiaťočníkov",
+            "active": true
+        },
+        {
+            "text": "Priebežne pracuj na zadaniach",
+            "active": true
+        },
+        {
+            "text": "Staň sa react developerom",
+            "active": true
+        }
+    ])
 
-    console.log(input);
 
     function handleSubmit(e){
         e.preventDefault();
 
-        setTask(input);
+        setTasks( tasks.concat(
+            {
+                text: input,
+                active: true
+            }
+        ) )
         setInput('');
     }
 
@@ -81,17 +102,25 @@ export default function App() {
                             </li>
 
                             {
-                                task !== null && (
-                                    <li className="py-2 d-flex justify-content-between">
+                                tasks.map((task, index) => (
+                                    <li key={index} className="py-2 d-flex justify-content-between">
                                         <div className="form-check">
                                             <label className="form-check-label">
                                                 <input className="form-check-input" type="checkbox"/>
-                                                { task }
+                                                {task.text}
                                             </label>
                                         </div>
                                         <button
                                             type="button"
                                             className="btn btn-sm btn-link text-danger"
+                                            onClick={() => {
+                                                console.log('delete', index);
+                                                setTasks(
+                                                    tasks.filter( (t, i) => (
+                                                        i !== index
+                                                    ) )
+                                                )
+                                            }}
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
                                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
@@ -99,8 +128,9 @@ export default function App() {
                                             </svg>
                                         </button>
                                     </li>
-                                )
+                                ))
                             }
+
                         </ul>
                     </div>
                     {/*<p className="">No Tasks for today :) </p>*/}
