@@ -1,0 +1,18 @@
+[
+    {
+        "text": "Nainštaluj si Node.js",
+        "active": true
+    },
+    {
+        "text": "Naštuduj prezentácie z Kurz pre začiaťočníkov",
+        "active": true
+    },
+    {
+        "text": "Priebežne pracuj na zadaniach",
+        "active": true
+    },
+    {
+        "text": "Staň sa react developerom",
+        "active": true
+    }
+]
