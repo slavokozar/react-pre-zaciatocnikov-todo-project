@@ -1,27 +1,25 @@
 import './style.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import axios from 'axios';
 
 export default function App() {
     const [input, setInput] = useState('');
 
-    const [tasks, setTasks] = useState([
-        {
-            "text": "Nainštaluj si Node.js",
-            "active": true
-        },
-        {
-            "text": "Naštuduj prezentácie z Kurz pre začiaťočníkov",
-            "active": true
-        },
-        {
-            "text": "Priebežne pracuj na zadaniach",
-            "active": true
-        },
-        {
-            "text": "Staň sa react developerom",
-            "active": true
-        }
-    ])
+    const [tasks, setTasks] = useState([])
+
+    async function getTasks(){
+        const response = await axios.get(
+            'https://todo.eragon.digital/api/tasks?api_token=react-pro-zacatecniky'
+        );
+
+        setTasks(response.data);
+    }
+
+    useEffect( () => {
+        getTasks();
+    }, [])
+
+
 
     console.log(tasks);
 
