@@ -16,14 +16,16 @@ export default function App() {
         getTasks();
     }, [])
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/tasks?api_token=${process.env.REACT_APP_API_TOKEN}`, {
+            text: input
+        });
+
+
         setTasks(tasks.concat(
-            {
-                text: input,
-                active: true
-            }
+            response.data
         ))
         setInput('');
     }
