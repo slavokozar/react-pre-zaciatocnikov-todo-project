@@ -3,25 +3,18 @@ import {useEffect, useState} from "react";
 import axios from 'axios';
 
 export default function App() {
-    const [input, setInput] = useState('');
 
+    const [input, setInput] = useState('');
     const [tasks, setTasks] = useState([])
 
-    async function getTasks(){
-        const response = await axios.get(
-            'https://todo.eragon.digital/api/tasks?api_token=react-pro-zacatecniky'
-        );
-
+    async function getTasks() {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/tasks?api_token=${process.env.REACT_APP_API_TOKEN}`);
         setTasks(response.data);
     }
 
-    useEffect( () => {
+    useEffect(() => {
         getTasks();
     }, [])
-
-
-
-    console.log(tasks);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -112,7 +105,7 @@ export default function App() {
                                     <li
                                         key={index}
                                         // className={ "py-2 d-flex justify-content-between " + (task.active ? 'completed' : '') }
-                                        className={ `py-2 d-flex justify-content-between ${ task.active ? '' : 'completed' }` }
+                                        className={`py-2 d-flex justify-content-between ${task.active ? '' : 'completed'}`}
                                     >
                                         <div className="form-check">
                                             <label className="form-check-label">
