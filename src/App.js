@@ -23,11 +23,36 @@ export default function App() {
             text: input
         });
 
-
         setTasks(tasks.concat(
             response.data
         ))
         setInput('');
+    }
+
+    async function handleActiveChange(task, active) {
+        const response = await axios.put(`${process.env.REACT_APP_API_URL}/tasks/${task.id}?api_token=${process.env.REACT_APP_API_TOKEN}`, {
+            active: active
+        });
+
+        setTasks(
+            tasks.map((t) => {
+                if (task.id === t.id) {
+                    return response.data;
+                }
+
+                return t;
+            })
+        )
+    }
+
+    async function handleDelete(task){
+        await axios.delete(`${process.env.REACT_APP_API_URL}/tasks/${task.id}?api_token=${process.env.REACT_APP_API_TOKEN}`);
+
+        setTasks(
+            tasks.filter((t) => (
+                task.id !== t.id
+            ))
+        )
     }
 
     return (
@@ -111,22 +136,12 @@ export default function App() {
                                     >
                                         <div className="form-check">
                                             <label className="form-check-label">
-                                                <input className="form-check-input" type="checkbox"
-                                                       checked={!task.active}
-                                                       onChange={(e) => {
-                                                           // ulozit do state
-                                                           console.log(e.target.checked)
-                                                           setTasks(
-                                                               tasks.map((t, i) => {
-                                                                   if (index === i) {
-                                                                       // zmena
-                                                                       t.active = !e.target.checked;
-                                                                   }
-
-                                                                   return t;
-                                                               })
-                                                           )
-                                                       }}
+                                                <input
+                                                    className="form-check-input" type="checkbox"
+                                                    checked={!task.active}
+                                                    onChange={(e) => {
+                                                        handleActiveChange(task, !e.target.checked);
+                                                    }}
                                                 />
                                                 {task.text}
                                             </label>
@@ -135,12 +150,7 @@ export default function App() {
                                             type="button"
                                             className="btn btn-sm btn-link text-danger"
                                             onClick={() => {
-                                                console.log('delete', index);
-                                                setTasks(
-                                                    tasks.filter((t, i) => (
-                                                        i !== index
-                                                    ))
-                                                )
+                                                handleDelete(task);
                                             }}
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
