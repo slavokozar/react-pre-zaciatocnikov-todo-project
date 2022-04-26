@@ -1,14 +1,14 @@
 import './style.css';
 import {useEffect, useState} from "react";
 import axios from 'axios';
+import FilterItem from './FilterItem';
 
 export default function App() {
-
     const [input, setInput] = useState('');
     const [tasks, setTasks] = useState([])
 
     async function getTasks() {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/tasks?api_token=${process.env.REACT_APP_API_TOKEN}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}tasks?api_token=${process.env.REACT_APP_API_TOKEN}`);
         setTasks(response.data);
     }
 
@@ -19,7 +19,7 @@ export default function App() {
     async function handleSubmit(e) {
         e.preventDefault();
 
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/tasks?api_token=${process.env.REACT_APP_API_TOKEN}`, {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}tasks?api_token=${process.env.REACT_APP_API_TOKEN}`, {
             text: input
         });
 
@@ -30,7 +30,7 @@ export default function App() {
     }
 
     async function handleActiveChange(task, active) {
-        const response = await axios.put(`${process.env.REACT_APP_API_URL}/tasks/${task.id}?api_token=${process.env.REACT_APP_API_TOKEN}`, {
+        const response = await axios.put(`${process.env.REACT_APP_API_URL}tasks/${task.id}?api_token=${process.env.REACT_APP_API_TOKEN}`, {
             active: active
         });
 
@@ -45,8 +45,8 @@ export default function App() {
         )
     }
 
-    async function handleDelete(task){
-        await axios.delete(`${process.env.REACT_APP_API_URL}/tasks/${task.id}?api_token=${process.env.REACT_APP_API_TOKEN}`);
+    async function handleDelete(task) {
+        await axios.delete(`${process.env.REACT_APP_API_URL}tasks/${task.id}?api_token=${process.env.REACT_APP_API_TOKEN}`);
 
         setTasks(
             tasks.filter((t) => (
@@ -54,6 +54,8 @@ export default function App() {
             ))
         )
     }
+
+    const [filter, setFilter] = useState('all');
 
     return (
         <div className="container py-5">
@@ -74,15 +76,27 @@ export default function App() {
                 </div>
                 <div className="card-body px-4">
                     <ul className="nav nav-pills mb-4">
-                        <li className="nav-item">
-                            <button className="nav-link active">all</button>
-                        </li>
-                        <li className="nav-item">
-                            <button className="nav-link">active</button>
-                        </li>
-                        <li className="nav-item">
-                            <button className="nav-link">completed</button>
-                        </li>
+                        {
+                            ["all", "active", "completed"].map((value) => (
+                                <FilterItem value={value}
+                                            filter={filter}
+                                            setFilter={setFilter}
+                                />
+                            ))
+                        }
+
+                        <FilterItem value="all"
+                                    filter={filter}
+                                    setFilter={setFilter}
+                        />
+                        <FilterItem value="active"
+                                    filter={filter}
+                                    setFilter={setFilter}
+                        />
+                        <FilterItem value="completed"
+                                    filter={filter}
+                                    setFilter={setFilter}
+                        />
                     </ul>
                     <div className="list-wrapper">
                         <ul>
