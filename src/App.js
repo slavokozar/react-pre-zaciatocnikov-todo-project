@@ -1,7 +1,9 @@
 import './style.css';
-import {useEffect, useState} from "react";
+import {createContext, useEffect, useState} from "react";
 import axios from 'axios';
 import FilterItem from './FilterItem';
+
+export const FilterContext = createContext([]);
 
 export default function App() {
     const [input, setInput] = useState('');
@@ -11,11 +13,9 @@ export default function App() {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}tasks?api_token=${process.env.REACT_APP_API_TOKEN}`);
         setTasks(response.data);
     }
-
     useEffect(() => {
         getTasks();
     }, [])
-
     async function handleSubmit(e) {
         e.preventDefault();
 
@@ -28,8 +28,7 @@ export default function App() {
         ))
         setInput('');
     }
-
-    async function handleActiveChange(task, active) {
+    async function handleActiveChange(task, active)     {
         const response = await axios.put(`${process.env.REACT_APP_API_URL}tasks/${task.id}?api_token=${process.env.REACT_APP_API_TOKEN}`, {
             active: active
         });
@@ -44,7 +43,6 @@ export default function App() {
             })
         )
     }
-
     async function handleDelete(task) {
         await axios.delete(`${process.env.REACT_APP_API_URL}tasks/${task.id}?api_token=${process.env.REACT_APP_API_TOKEN}`);
 
@@ -75,29 +73,13 @@ export default function App() {
                     </form>
                 </div>
                 <div className="card-body px-4">
-                    <ul className="nav nav-pills mb-4">
-                        {
-                            ["all", "active", "completed"].map((value) => (
-                                <FilterItem value={value}
-                                            filter={filter}
-                                            setFilter={setFilter}
-                                />
-                            ))
-                        }
-
-                        <FilterItem value="all"
-                                    filter={filter}
-                                    setFilter={setFilter}
-                        />
-                        <FilterItem value="active"
-                                    filter={filter}
-                                    setFilter={setFilter}
-                        />
-                        <FilterItem value="completed"
-                                    filter={filter}
-                                    setFilter={setFilter}
-                        />
-                    </ul>
+                    <FilterContext.Provider value={[filter, setFilter]}>
+                        <ul className="nav nav-pills mb-4">
+                            <FilterItem value="all"/>
+                            <FilterItem value="active"/>
+                            <FilterItem value="completed"/>
+                        </ul>
+                    </FilterContext.Provider>
                     <div className="list-wrapper">
                         <ul>
                             <li className="py-2 d-flex justify-content-between completed">
@@ -142,7 +124,16 @@ export default function App() {
                             </li>
 
                             {
-                                tasks.map((task, index) => (
+                                tasks
+                                    .filter((task, index) => {
+                                        if( filter === 'active'){
+                                            return task.active;
+                                        }else if( filter === 'completed'){
+                                            return !task.active;
+                                        }
+                                        return true;
+                                    })
+                                    .map((task, index) => (
                                     <li
                                         key={index}
                                         // className={ "py-2 d-flex justify-content-between " + (task.active ? 'completed' : '') }
@@ -184,7 +175,7 @@ export default function App() {
                     {/*<p className="">No Tasks for today :) </p>*/}
                 </div>
 
-                <div class="card-footer text-center">
+                <div className="card-footer text-center">
                     &copy; 2022
                 </div>
             </div>
