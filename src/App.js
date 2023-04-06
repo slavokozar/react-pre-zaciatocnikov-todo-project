@@ -94,6 +94,17 @@ export default function App() {
                                             <button
                                                 type="button"
                                                 className="btn btn-sm btn-link text-danger"
+                                                onClick={() => {
+                                                    // vymazat task XYZ
+
+                                                    setTasks(
+                                                        tasks.filter((localTask, localIndex) => (
+                                                            index !== localIndex
+                                                        ))
+                                                    )
+
+                                                    console.log("delete task", index);
+                                                }}
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                      fill="currentColor"
