@@ -1,5 +1,7 @@
 import './style.css';
-import {useState} from "react";
+import {useState, useEffect} from "react";
+import FilterItem from "./FilterItem";
+import axios from "axios";
 
 export default function App() {
 
@@ -37,10 +39,34 @@ export default function App() {
                 }
             )
         )
-
-        console.log("submit form");
     }
 
+    useEffect(() => {
+        console.log('Log pri inite appky');
+
+        fetchTasks();
+
+    }, []);
+
+    useEffect(async () => {
+        // const response = await fetch("google.com");
+        //
+        // console.log(response);
+    }, [])
+
+
+    async function fetchTasks() {
+        // const response =  await fetch('https://todo.eragon.digital/api/tasks?api_token=react-pro-zacatecniky');
+        // const tasks =               await response.json();
+
+        const response = await axios.get('https://todo.eragon.digital/api/tasks?api_token=react-pro-zacatecniky');
+
+        setTasks(response.data);
+    }
+
+    console.log("logujem nieco v appke");
+
+    const [filter, setFilter] = useState('active');
     return (
         <div className="container py-5">
             <div className="card">
@@ -63,15 +89,9 @@ export default function App() {
 
                 <div className="card-body px-4">
                     <ul className="nav nav-pills mb-4">
-                        <li className="nav-item">
-                            <button className="nav-link active">all</button>
-                        </li>
-                        <li className="nav-item">
-                            <button className="nav-link">active</button>
-                        </li>
-                        <li className="nav-item">
-                            <button className="nav-link">completed</button>
-                        </li>
+                        <FilterItem value="all" filterValue={filter} setFilterValue={setFilter}/>
+                        <FilterItem value="active" filterValue={filter} setFilterValue={setFilter}/>
+                        <FilterItem value="completed" filterValue={filter} setFilterValue={setFilter}/>
                     </ul>
 
                     <div className="list-wrapper">
@@ -87,7 +107,30 @@ export default function App() {
                                         <li key={index} className="py-2 d-flex justify-content-between completed">
                                             <div className="form-check">
                                                 <label className="form-check-label">
-                                                    <input className="form-check-input" type="checkbox"/>
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        onChange={(event) => {
+                                                            // je checkbox `checked` ?
+                                                            console.log('check', event.target.checked);
+                                                            // tasks[index].completed = true / false
+
+                                                            setTasks(
+                                                                tasks.map((t, i) => {
+                                                                    if (i === index) {
+                                                                        // zmena
+                                                                        return {
+                                                                            text: t.text,
+                                                                            completed: event.target.checked
+                                                                        };
+                                                                    } else {
+                                                                        // bez zmeny
+                                                                        return t;
+                                                                    }
+                                                                })
+                                                            )
+                                                        }}
+                                                    />
                                                     {task.text}
                                                 </label>
                                             </div>
