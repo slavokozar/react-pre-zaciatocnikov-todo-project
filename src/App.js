@@ -1,6 +1,19 @@
 import './style.css';
 
 export default function App() {
+
+    const tasks = [
+        {
+            "text": "Nainštaluj si Node.js",
+            "active": true
+        },{
+            "text": "Naštuduj prezentácie z Kurz pre začiaťočníkov",
+            "active": true
+        }
+    ]
+
+
+    
     return (
         <div className="container py-5">
             <div className="card">
