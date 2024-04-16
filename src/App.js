@@ -1,12 +1,13 @@
 import './style.css';
 import {useState} from "react";
+import FilterItem from "./FilterItem";
 
 export default function App() {
 
     const initialTasks = [
         {
             "text": "Nainštaluj si Node.js",
-            "active": true
+            "active": false
         },
         {
             "text": "Naštuduj prezentácie z Kurz pre začiaťočníkov",
@@ -33,6 +34,9 @@ export default function App() {
 
         setInput('');
     }
+
+    const [filter, setFilter] = useState('all');
+    console.log(filter);
 
     return (
         <div className="container py-5">
@@ -62,15 +66,16 @@ export default function App() {
                 </div>
                 <div className="card-body px-4">
                     <ul className="nav nav-pills mb-4">
-                        <li className="nav-item">
-                            <button className="nav-link active">all</button>
-                        </li>
-                        <li className="nav-item">
-                            <button className="nav-link">active</button>
-                        </li>
-                        <li className="nav-item">
-                            <button className="nav-link">completed</button>
-                        </li>
+
+                        {
+                            ["all", "active", "completed"].map((value) => (
+                                <FilterItem value={value} filter={filter} setFilter={setFilter}/>
+                            ))
+                        }
+
+                        {/*<FilterItem value="all" filter={filter} setFilter={setFilter}/>*/}
+                        {/*<FilterItem value="active" filter={filter} setFilter={setFilter}/>*/}
+                        {/*<FilterItem value="completed" filter={filter} setFilter={setFilter}/>*/}
                     </ul>
 
                     {
@@ -84,7 +89,31 @@ export default function App() {
                                                 <li key={index} className="py-2 d-flex justify-content-between">
                                                     <div className="form-check">
                                                         <label className="form-check-label">
-                                                            <input className="form-check-input" type="checkbox"/>
+                                                            <input
+                                                                checked={!task.active}
+                                                                onChange={(e) => {
+                                                                    console.log('change checkbox', e.target.checked);
+                                                                    // v reactu nebude fungovat, potrebujeme immutable pristup
+                                                                    // tasks[index].active = true / false;
+
+
+                                                                    setTasks(
+                                                                        tasks.map( (t, i) => {
+                                                                            if( i == index) {
+                                                                                return {
+                                                                                    text: t.text,
+                                                                                    active: !e.target.checked
+                                                                                }
+                                                                            } else {
+                                                                                return t;
+                                                                            }
+                                                                        })
+                                                                    )
+
+                                                                }}
+                                                                className="form-check-input"
+                                                                type="checkbox"
+                                                            />
                                                             {task.text}
                                                         </label>
                                                     </div>
