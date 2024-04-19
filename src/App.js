@@ -1,9 +1,10 @@
 import './style.css';
-import {useState} from "react";
 import FilterItem from "./FilterItem";
 
-export default function App() {
+import {useState, useEffect} from "react";
+import axios from "axios";
 
+export default function App() {
     const initialTasks = [
         {
             "text": "Nainštaluj si Node.js",
@@ -17,6 +18,32 @@ export default function App() {
 
     const [tasks, setTasks] = useState(initialTasks);
     const [input, setInput] = useState('');
+
+    async function fetchTasks() {
+        const response = await fetch('https://todo.eragon.digital/api/tasks?api_token=react-pro-zacatecniky');
+        const data = await response.json();
+        console.log(data)
+
+        setTasks(data);
+    }
+    async function fetchTasksWithAxios() {
+        const data = await axios.get('https://todo.eragon.digital/api/tasks?api_token=react-pro-zacatecniky');
+        console.log(data)
+
+        setTasks(data);
+    }
+
+    useEffect(() => {
+        fetchTasks();
+
+        // fetch('https://todo.eragon.digital/api/tasks?api_token=react-pro-zacatecniky')
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(data)
+        //     }); // 2
+
+    }, [])
+
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -98,8 +125,8 @@ export default function App() {
 
 
                                                                     setTasks(
-                                                                        tasks.map( (t, i) => {
-                                                                            if( i == index) {
+                                                                        tasks.map((t, i) => {
+                                                                            if (i == index) {
                                                                                 return {
                                                                                     text: t.text,
                                                                                     active: !e.target.checked
